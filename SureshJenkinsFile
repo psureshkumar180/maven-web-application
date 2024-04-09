@@ -4,6 +4,7 @@ echo "Build number: ${env.BUILD_NUMBER}"
 echo "Job name is: ${env.JOB_NAME}"
 echo "Node name is: ${env.NODE_NAME}" 
 echo "Jenkins URL is: ${env.JENKINS_URL}"
+properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), pipelineTriggers([pollSCM('* * * * *')])])
     //Code CheckOut
     stage ('CheckOut') {
        git branch: 'development', credentialsId: 'git-creds', url: 'https://github.com/psureshkumar180/maven-web-application.git'
