@@ -1,0 +1,31 @@
+node {
+    def mavenHome = tool name: "maven3.9.5"
+    
+    //Code CheckOut
+    stage ('CheckOut') {
+       git branch: 'development', credentialsId: 'git-creds', url: 'https://github.com/psureshkumar180/maven-web-application.git'
+    }
+    
+    //Build stage
+    stage ('Build') {
+        sh "$mavenHome/bin/mvn clean package"
+    }
+    
+    //Code quality Test
+    stage ('SonarQubeTest') {
+        sh "$mavenHome/bin/mvn sonar:sonar"
+    }
+    
+    //Artifactory Push
+    stage ('UploadArtifactToNexus') {
+        sh "$mavenHome/bin/mvn deploy"
+    }
+    
+    //Deploy To Tomcat  
+    stage ('DeployToTomcat') {
+        sshagent(['tomcat_server_ssh']) {
+   sh " scp -o StrictHostKeyChecking=no ./target/maven-web-application.war ec2-user@13.233.247.13:/root/apache-tomcat-9.0.87/webapps "
+}
+    }
+    
+}
