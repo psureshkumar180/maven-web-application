@@ -3,11 +3,9 @@ pipeline {
  tools { maven "maven3.9.5"}
  
 options {
-  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5') }
   triggers {
   pollSCM '* * * * *'
-}
-
 }
  stages { 
      stage ('CodeCheckOut') {
