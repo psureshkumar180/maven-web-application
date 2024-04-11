@@ -1,0 +1,41 @@
+pipeline {
+ agent any
+ tools { maven "maven3.9.5"}
+ 
+options {
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')
+  triggers {
+  pollSCM '* * * * *'
+}
+
+}
+ stages { 
+     stage ('CodeCheckOut') {
+     steps {git branch: 'development', credentialsId: 'git-creds', url: 'https://github.com/psureshkumar180/maven-web-application.git'}
+ }
+ 
+ stage ('CodeBuild') {
+     steps {
+         sh "mvn clean package"
+     }
+ }
+ stage ('CodeScan') {
+     steps {
+         sh "mvn sonar:sonar"
+     }
+ }
+ stage ('MovingArtifactoryToNexus') {
+     steps {
+         sh "mvn deploy"
+     }
+ }
+ stage ('Deployment') {
+     steps {
+        sshagent(['tomcat_server_ssh']) {
+            sh "scp -r ./target/maven-web-application.war ec2-user@13.233.247.13:/root/apache-tomcat-9.0.87/webapps"
+    
+}
+     }
+ }
+ }
+}
