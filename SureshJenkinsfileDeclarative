@@ -4,9 +4,7 @@ pipeline {
  
 options {
   buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5') }
-  triggers {
-  pollSCM '* * * * *'
-}
+
  stages { 
      stage ('CodeCheckOut') {
      steps {git branch: 'development', credentialsId: 'git-creds', url: 'https://github.com/psureshkumar180/maven-web-application.git'}
