@@ -33,10 +33,5 @@ options {
 }
      }
  }
- }
-post {
-mail bcc: '', body: '''Hello Suresh !!!
-
-Your deployment is successful.''', cc: '', from: 'no-reply@gmail.com', replyTo: 'psureshkumar180@gmail.com', subject: 'Build is Successful', to: 'psureshkumar180@gmail.com'
 }
 }
